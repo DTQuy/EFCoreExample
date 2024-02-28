@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFCoreExample.Migrations
 {
     [DbContext(typeof(EFCoreCodeFirstDBContext))]
-    [Migration("20240226183026_UpdateUsserOrderProduct")]
-    partial class UpdateUsserOrderProduct
+    [Migration("20240228161119_CreateDB")]
+    partial class CreateDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,7 @@ namespace EFCoreExample.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("EFCoreExample.Entity.User", b =>
@@ -109,11 +109,32 @@ namespace EFCoreExample.Migrations
 
             modelBuilder.Entity("EFCoreExample.Entity.UserOrder", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OrderID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderID"));
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrderID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserOrders");
+                });
+
+            modelBuilder.Entity("EFCoreExample.Entity.UserOrderProduct", b =>
+                {
+                    b.Property<int>("UserOrderProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserOrderProductID"));
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("numeric");
@@ -122,32 +143,22 @@ namespace EFCoreExample.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("OrderID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.HasKey("UserOrderProductID");
 
-                    b.HasKey("Id");
+                    b.HasIndex("OrderID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ProductID");
 
-                    b.ToTable("UserOrder");
-                });
-
-            modelBuilder.Entity("EFCoreExample.Entity.UserOrderProduct", b =>
-                {
-                    b.Property<int>("UserOrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("UserOrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("UserOrderProduct");
+                    b.ToTable("UserOrderProducts");
                 });
 
             modelBuilder.Entity("EFCoreExample.Entity.UserDetails", b =>
@@ -165,7 +176,7 @@ namespace EFCoreExample.Migrations
                 {
                     b.HasOne("EFCoreExample.Entity.User", "User")
                         .WithMany("UserOrders")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -174,15 +185,15 @@ namespace EFCoreExample.Migrations
 
             modelBuilder.Entity("EFCoreExample.Entity.UserOrderProduct", b =>
                 {
-                    b.HasOne("EFCoreExample.Entity.Product", "Product")
-                        .WithMany("UserOrderProducts")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("EFCoreExample.Entity.UserOrder", "UserOrder")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EFCoreExample.Entity.UserOrder", "UserOrder")
+                    b.HasOne("EFCoreExample.Entity.Product", "Product")
                         .WithMany("UserOrderProducts")
-                        .HasForeignKey("UserOrderId")
+                        .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -205,7 +216,7 @@ namespace EFCoreExample.Migrations
 
             modelBuilder.Entity("EFCoreExample.Entity.UserOrder", b =>
                 {
-                    b.Navigation("UserOrderProducts");
+                    b.Navigation("OrderProducts");
                 });
 #pragma warning restore 612, 618
         }
