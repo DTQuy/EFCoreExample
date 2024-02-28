@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -12,7 +11,7 @@ namespace EFCoreExample.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -24,10 +23,10 @@ namespace EFCoreExample.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    _ = table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -40,10 +39,10 @@ namespace EFCoreExample.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    _ = table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "UserDetails",
                 columns: table => new
                 {
@@ -56,8 +55,8 @@ namespace EFCoreExample.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserDetails", x => x.Id);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_UserDetails", x => x.Id);
+                    _ = table.ForeignKey(
                         name: "FK_UserDetails_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
@@ -65,7 +64,7 @@ namespace EFCoreExample.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "UserOrders",
                 columns: table => new
                 {
@@ -76,8 +75,8 @@ namespace EFCoreExample.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserOrders", x => x.OrderID);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_UserOrders", x => x.OrderID);
+                    _ = table.ForeignKey(
                         name: "FK_UserOrders_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
@@ -85,7 +84,7 @@ namespace EFCoreExample.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "UserOrderProducts",
                 columns: table => new
                 {
@@ -99,14 +98,14 @@ namespace EFCoreExample.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserOrderProducts", x => x.UserOrderProductID);
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_UserOrderProducts", x => x.UserOrderProductID);
+                    _ = table.ForeignKey(
                         name: "FK_UserOrderProducts_Products_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_UserOrderProducts_UserOrders_OrderID",
                         column: x => x.OrderID,
                         principalTable: "UserOrders",
@@ -114,23 +113,23 @@ namespace EFCoreExample.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_UserDetails_UserId",
                 table: "UserDetails",
                 column: "UserId",
                 unique: true);
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_UserOrderProducts_OrderID",
                 table: "UserOrderProducts",
                 column: "OrderID");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_UserOrderProducts_ProductID",
                 table: "UserOrderProducts",
                 column: "ProductID");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_UserOrders_UserID",
                 table: "UserOrders",
                 column: "UserID");
@@ -139,19 +138,19 @@ namespace EFCoreExample.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "UserDetails");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "UserOrderProducts");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "Products");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "UserOrders");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "Users");
         }
     }

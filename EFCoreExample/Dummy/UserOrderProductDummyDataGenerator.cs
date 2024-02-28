@@ -2,15 +2,26 @@
 
 namespace EFCoreExample.Dummy
 {
+    /// <summary>
+    /// Generates dummy data for user order products.
+    /// </summary>
     public class UserOrderProductDummyDataGenerator
     {
         private readonly EFCoreCodeFirstDBContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserOrderProductDummyDataGenerator"/> class.
+        /// </summary>
+        /// <param name="context">The database context.</param>
         public UserOrderProductDummyDataGenerator(EFCoreCodeFirstDBContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Generates dummy user order products.
+        /// </summary>
+        /// <param name="numberOfUserOrderProducts">The number of user order products to generate.</param>
         public void GenerateDummyUserOrderProducts(int numberOfUserOrderProducts)
         {
             if (!_context.UserOrders.Any())
@@ -40,7 +51,10 @@ namespace EFCoreExample.Dummy
             Console.WriteLine($"Dummy UserOrderProducts ({numberOfUserOrderProducts}) created successfully.");
         }
 
-
+        /// <summary>
+        /// Generates a random order ID.
+        /// </summary>
+        /// <returns>A random order ID.</returns>
         private int GenerateRandomOrderId()
         {
             Random random = new();
@@ -49,25 +63,36 @@ namespace EFCoreExample.Dummy
             return orderIds.Count == 0 ? 1 : orderIds[random.Next(orderIds.Count)];
         }
 
-
-        private int GenerateRandomProductId()
+        /// <summary>
+        /// Generates a random product ID.
+        /// </summary>
+        private static int GenerateRandomProductId()
         {
             Random random = new();
             return random.Next(1, 10);
         }
 
-        private int GenerateRandomQuantity()
+        /// <summary>
+        /// Generates a random quantity.
+        /// </summary>
+        private static int GenerateRandomQuantity()
         {
             Random random = new();
             return random.Next(1, 10);
         }
 
-        private string GenerateRandomNote()
+        /// <summary>
+        /// Generates a random note.
+        /// </summary>
+        private static string GenerateRandomNote()
         {
             return "Note" + Guid.NewGuid().ToString()[..8];
         }
 
-        private decimal GenerateRandomDiscount()
+        /// <summary>
+        /// Generates a random discount.
+        /// </summary>
+        private static decimal GenerateRandomDiscount()
         {
             Random random = new();
             return Math.Round((decimal)(random.NextDouble() * 100), 2);

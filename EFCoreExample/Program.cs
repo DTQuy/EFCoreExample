@@ -10,9 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreExample
 {
-    internal class Program
+    public class Program
     {
-        private static void Main(string[] args)
+        /// <summary>
+        /// Main method of the program
+        /// </summary>
+        private static void Main()
         {
             bool exit = false;
             while (!exit)
@@ -27,7 +30,9 @@ namespace EFCoreExample
                 Console.WriteLine("7. Exit");
 
                 Console.Write("Enter your choice: ");
-                string choice = Console.ReadLine();
+                string? input = Console.ReadLine();
+                string choice = input ?? "";
+
 
                 switch (choice)
                 {
@@ -59,6 +64,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Displays user information
+        /// </summary>
         private static void ShowUserInformation()
         {
             using EFCoreCodeFirstDBContext context = new();
@@ -70,6 +78,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Displays product information
+        /// </summary>
         private static void ShowProductInformation()
         {
             using EFCoreCodeFirstDBContext context = new();
@@ -81,6 +92,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Displays user details by ID
+        /// </summary>
         private static void ShowUserDetailsByID()
         {
             Console.Write("Enter the User ID: ");
@@ -111,6 +125,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Displays order information
+        /// </summary>
         private static void ShowOrderInformation()
         {
             using EFCoreCodeFirstDBContext context = new();
@@ -121,14 +138,20 @@ namespace EFCoreExample
             {
                 Console.WriteLine($"Order ID: {order.OrderID}, Order Date: {order.OrderDate}");
 
-                Console.WriteLine("Products:");
-                foreach (UserOrderProduct product in order.OrderProducts)
+                if (order.OrderProducts != null)
                 {
-                    Console.WriteLine($"  Product ID: {product.ProductID}, Quantity: {product.Quantity}, Note: {product.Note}, Discount: {product.Discount}");
+                    Console.WriteLine("Products:");
+                    foreach (UserOrderProduct product in order.OrderProducts)
+                    {
+                        Console.WriteLine($"  Product ID: {product.ProductID}, Quantity: {product.Quantity}, Note: {product.Note}, Discount: {product.Discount}");
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Displays order information by UserID
+        /// </summary>
         private static void ShowOrderInformationByUserID()
         {
             Console.Write("Enter the User ID: ");
@@ -136,22 +159,30 @@ namespace EFCoreExample
             {
                 using EFCoreCodeFirstDBContext context = new();
                 List<UserOrder> userOrders = context.UserOrders
-                                        .Where(order => order.UserID == userID)
-                                        .Include(order => order.OrderProducts)
-                                            .ThenInclude(orderProduct => orderProduct.Product)
-                                        .ToList();
-
-                Console.WriteLine($"Order Information for User with ID {userID}:");
-                foreach (UserOrder? order in userOrders)
+                        .Where(order => order.UserID == userID)
+                        .Include(order => order.OrderProducts.Where(op => op != null).ToList())
+                        .ToList();
+                if (userOrders.Any())
                 {
-                    Console.WriteLine($"Order ID: {order.OrderID}, Order Date: {order.OrderDate}");
-
-                    foreach (UserOrderProduct orderProduct in order.OrderProducts)
+                    Console.WriteLine($"Order Information for User with ID {userID}:");
+                    foreach (UserOrder? order in userOrders)
                     {
-                        Console.WriteLine($"  Product ID: {orderProduct.ProductID}, Quantity: {orderProduct.Quantity}, Note: {orderProduct.Note}, Discount: {orderProduct.Discount}");
-                        Console.WriteLine($"    Product Name: {orderProduct.Product.Name}, Price: {orderProduct.Product.Price}, Description: {orderProduct.Product.Description}");
+                        Console.WriteLine($"Order ID: {order.OrderID}, Order Date: {order.OrderDate}");
+
+                        foreach (UserOrderProduct orderProduct in order.OrderProducts ?? Enumerable.Empty<UserOrderProduct>())
+                        {
+                            if (orderProduct.Product != null)
+                            {
+                                Console.WriteLine($"  Product ID: {orderProduct.ProductID}, Quantity: {orderProduct.Quantity}, Note: {orderProduct.Note}, Discount: {orderProduct.Discount}");
+                                Console.WriteLine($"    Product Name: {orderProduct.Product.Name}, Price: {orderProduct.Product.Price}, Description: {orderProduct.Product.Description}");
+                            }
+                        }
+                        Console.WriteLine();
                     }
-                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine($"No orders found for User with ID {userID}.");
                 }
             }
             else
@@ -160,7 +191,9 @@ namespace EFCoreExample
             }
         }
 
-
+        /// <summary>
+        /// Adds dummy data to the database
+        /// </summary>
         private static void AddDummyData()
         {
             Console.WriteLine("Choose what you want to add:");
@@ -170,7 +203,9 @@ namespace EFCoreExample
             Console.WriteLine("4. Dummy UserOrderProduct");
 
             Console.Write("Enter your choice: ");
-            string choice = Console.ReadLine();
+            string? input = Console.ReadLine();
+            string choice = input ?? "";
+
 
             switch (choice)
             {
@@ -192,6 +227,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Adds dummy users to the database
+        /// </summary>
         private static void AddDummyUsers()
         {
             Console.Write("Enter the number of dummy users to add: ");
@@ -210,6 +248,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Adds dummy products to the database
+        /// </summary>
         private static void AddDummyProducts()
         {
             Console.Write("Enter the number of dummy products to add: ");
@@ -228,6 +269,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Adds dummy orders to the database
+        /// </summary>
         private static void AddDummyOrders()
         {
             Console.Write("Enter the number of dummy orders to add: ");
@@ -246,6 +290,9 @@ namespace EFCoreExample
             }
         }
 
+        /// <summary>
+        /// Adds dummy order products to the database
+        /// </summary>
         private static void AddDummyOrdersProduct()
         {
             Console.Write("Enter the number of dummy orders to add: ");
