@@ -24,7 +24,6 @@ namespace EFCoreExample.Dummy
         /// <param name="numberOfUsers">The number of users to generate.</param>
         public void GenerateDummyUsers(int numberOfUsers)
         {
-            _context.Users.RemoveRange(_context.Users);
             _ = _context.SaveChanges();
 
             for (int i = 0; i < numberOfUsers; i++)

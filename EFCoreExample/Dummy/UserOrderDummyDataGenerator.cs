@@ -24,7 +24,6 @@ namespace EFCoreExample.Dummy
         /// <param name="numberOfUserOrders">The number of user orders to generate.</param>
         public void GenerateDummyUserOrders(int numberOfUserOrders)
         {
-            _context.UserOrders.RemoveRange(_context.UserOrders);
             _ = _context.SaveChanges();
 
             for (int i = 0; i < numberOfUserOrders; i++)

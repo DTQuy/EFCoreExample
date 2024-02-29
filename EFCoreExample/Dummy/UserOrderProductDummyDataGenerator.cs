@@ -29,7 +29,6 @@ namespace EFCoreExample.Dummy
                 Console.WriteLine("No data in UserOrder table. Please add data to UserOrder table first.");
                 return;
             }
-            _context.UserOrderProducts.RemoveRange(_context.UserOrderProducts);
             _ = _context.SaveChanges();
 
             for (int i = 0; i < numberOfUserOrderProducts; i++)
@@ -37,7 +36,7 @@ namespace EFCoreExample.Dummy
                 UserOrderProduct userOrderProduct = new()
                 {
                     OrderID = GenerateRandomOrderId(),
-                    ProductID = GenerateRandomProductId(),
+                    ProductID = GenerateRandomProductId(_context),
                     Quantity = GenerateRandomQuantity(),
                     Note = GenerateRandomNote(),
                     Discount = GenerateRandomDiscount()
@@ -54,7 +53,7 @@ namespace EFCoreExample.Dummy
         /// <summary>
         /// Generates a random order ID.
         /// </summary>
-        /// <returns>A random order ID.</returns>
+        /// <returns></returns>
         private int GenerateRandomOrderId()
         {
             Random random = new();
@@ -66,10 +65,25 @@ namespace EFCoreExample.Dummy
         /// <summary>
         /// Generates a random product ID.
         /// </summary>
-        private static int GenerateRandomProductId()
+        private static int GenerateRandomProductId(EFCoreCodeFirstDBContext context)
         {
+            List<int> productIds = new();
+
+            List<Product> products = context.Products.ToList();
+
+            foreach (Product? product in products)
+            {
+                productIds.Add(product.Id);
+            }
+            if (productIds.Count == 0)
+            {
+                return -1;
+            }
             Random random = new();
-            return random.Next(1, 10);
+
+            int randomIndex = random.Next(0, productIds.Count);
+            int randomProductId = productIds[randomIndex];
+            return randomProductId;
         }
 
         /// <summary>

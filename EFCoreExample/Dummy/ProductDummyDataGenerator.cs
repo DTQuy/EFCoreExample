@@ -24,7 +24,6 @@ namespace EFCoreExample.Dummy
         /// <param name="numberOfProducts">The number of products to generate.</param>
         public void GenerateDummyProducts(int numberOfProducts)
         {
-            _context.Products.RemoveRange(_context.Products);
             _ = _context.SaveChanges();
 
             for (int i = 0; i < numberOfProducts; i++)
