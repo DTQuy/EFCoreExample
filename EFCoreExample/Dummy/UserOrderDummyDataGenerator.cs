@@ -33,9 +33,10 @@ namespace EFCoreExample.Dummy
                 };
 
                 _ = _context.UserOrders.Add(userOrder);
+                _ = _context.SaveChanges();
+                Console.WriteLine($"Order Date: {userOrder.OrderDate}, UserId: {userOrder.UserID}");
+                Console.WriteLine();
             }
-
-            _ = _context.SaveChanges();
 
             Console.WriteLine($"Dummy UserOrders ({numberOfUserOrders}) created successfully.");
         }

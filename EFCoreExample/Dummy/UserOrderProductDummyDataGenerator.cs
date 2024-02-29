@@ -43,9 +43,11 @@ namespace EFCoreExample.Dummy
                 };
 
                 _ = _context.UserOrderProducts.Add(userOrderProduct);
-            }
+                _ = _context.SaveChanges();
 
-            _ = _context.SaveChanges();
+                Console.WriteLine($"Order Id: {userOrderProduct.OrderID}, ProductId: {userOrderProduct.ProductID}, Quantity: {userOrderProduct.Quantity}, Discount: {userOrderProduct.Discount}");
+                Console.WriteLine();
+            }
 
             Console.WriteLine($"Dummy UserOrderProducts ({numberOfUserOrderProducts}) created successfully.");
         }

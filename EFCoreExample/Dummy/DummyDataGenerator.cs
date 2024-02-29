@@ -44,12 +44,17 @@ namespace EFCoreExample.Dummy
 
                 _ = _context.Users.Add(user);
                 _ = _context.UserDetails.Add(userDetails);
-            }
 
-            _ = _context.SaveChanges();
+                _ = _context.SaveChanges();
+
+                Console.WriteLine($"Name: {user.Name}, Email: {user.Email}, Password: {user.Password}, EmailConfirmed: {user.EmailConfirmed}");
+                Console.WriteLine($"Avatar: {userDetails.Avatar}, Age: {userDetails.Age}, Birthday: {userDetails.Birthday}");
+                Console.WriteLine();
+            }
 
             Console.WriteLine($"Dummy users ({numberOfUsers}) created successfully.");
         }
+
 
         /// <summary>
         /// Generates a random name.

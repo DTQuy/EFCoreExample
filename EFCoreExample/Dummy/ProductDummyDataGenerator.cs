@@ -34,9 +34,10 @@ namespace EFCoreExample.Dummy
                 };
 
                 _ = _context.Products.Add(product);
+                _ = _context.SaveChanges();
+                Console.WriteLine($"Name: {product.Name}, Price: {product.Price}, Description: {product.Description}");
+                Console.WriteLine();
             }
-
-            _ = _context.SaveChanges();
 
             Console.WriteLine($"Dummy products ({numberOfProducts}) created successfully.");
         }
