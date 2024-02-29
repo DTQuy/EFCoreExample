@@ -35,7 +35,7 @@ namespace EFCoreExample.Dummy
             {
                 UserOrderProduct userOrderProduct = new()
                 {
-                    OrderID = GenerateRandomOrderId(),
+                    OrderID = GenerateRandomOrderId(_context),
                     ProductID = GenerateRandomProductId(_context),
                     Quantity = GenerateRandomQuantity(),
                     Note = GenerateRandomNote(),
@@ -54,12 +54,25 @@ namespace EFCoreExample.Dummy
         /// Generates a random order ID.
         /// </summary>
         /// <returns></returns>
-        private int GenerateRandomOrderId()
+        private int GenerateRandomOrderId(EFCoreCodeFirstDBContext context)
         {
+            List<int> orderIds = new();
+
+            List<UserOrder> userOrders = context.UserOrders.ToList();
+
+            foreach (UserOrder? userOrder in userOrders)
+            {
+                orderIds.Add(userOrder.OrderID);
+            }
+            if (orderIds.Count == 0)
+            {
+                return -1;
+            }
             Random random = new();
 
-            List<int> orderIds = _context.UserOrders.Select(o => o.OrderID).ToList();
-            return orderIds.Count == 0 ? 1 : orderIds[random.Next(orderIds.Count)];
+            int randomIndex = random.Next(0, orderIds.Count);
+            int randomProductId = orderIds[randomIndex];
+            return randomProductId;
         }
 
         /// <summary>

@@ -24,14 +24,12 @@ namespace EFCoreExample.Dummy
         /// <param name="numberOfUserOrders">The number of user orders to generate.</param>
         public void GenerateDummyUserOrders(int numberOfUserOrders)
         {
-            _ = _context.SaveChanges();
-
             for (int i = 0; i < numberOfUserOrders; i++)
             {
                 UserOrder userOrder = new()
                 {
                     OrderDate = GenerateRandomOrderDate(),
-                    UserID = GenerateRandomUserId()
+                    UserID = GenerateRandomUserId(_context)
                 };
 
                 _ = _context.UserOrders.Add(userOrder);
@@ -45,11 +43,24 @@ namespace EFCoreExample.Dummy
         /// <summary>
         /// Generates a random user ID.
         /// </summary>
-        private int GenerateRandomUserId()
+        private int GenerateRandomUserId(EFCoreCodeFirstDBContext context)
         {
+            List<int> userIds = new();
+            List<User> users = context.Users.ToList();
+            foreach (User? user in users)
+            {
+                userIds.Add(user.Id);
+            }
+            if (userIds.Count == 0)
+            {
+                return -1;
+            }
             Random random = new();
-            List<int> userIds = _context.Users.Select(u => u.Id).ToList();
-            return userIds.Count == 0 ? 1 : userIds[random.Next(userIds.Count)];
+
+            int randomIndex = random.Next(0, userIds.Count);
+            int randomUserId = userIds[randomIndex];
+            return randomUserId;
+
         }
 
         /// <summary>
